@@ -26,15 +26,19 @@
     <url>https://github.com/${gitHubRepo}</url>
   </scm>
   <properties>
-    <revision>9.22.3</revision>
+    <revision>10.17.3</revision>
     <changelist>999999-SNAPSHOT</changelist>
-    <jenkins.baseline>2.440</jenkins.baseline>
-    <jenkins.version>${jenkins.baseline}.3</jenkins.version>
+    <jenkins.baseline>weekly</jenkins.baseline>
+    <jenkins.version>2.475</jenkins.version>
     <gitHubRepo>jenkinsci/${project.artifactId}-plugin</gitHubRepo>
     <spotless.check.skip>false</spotless.check.skip>
 
     <!-- Test dependencies version -->
     <testcontainer.version>1.20.1</testcontainer.version>
+
+    <!-- TODO JENKINS-73339 until in parent POM -->
+    <jenkins-test-harness.version>2254.vcff7a_d4969e5</jenkins-test-harness.version>
+    <maven.compiler.release>17</maven.compiler.release>
 
   </properties>
 
@@ -42,7 +46,7 @@
     <dependencies>
       <dependency>
         <groupId>io.jenkins.tools.bom</groupId>
-        <artifactId>bom-${jenkins.baseline}.x</artifactId>
+        <artifactId>bom-weekly</artifactId>
         <version>3334.v18e2a_2f48356</version>
         <type>pom</type>
         <scope>import</scope>
@@ -58,6 +62,11 @@
         <artifactId>flyway-commandline</artifactId>
         <version>${revision}</version>
         <type>zip</type>
+      </dependency>
+      <dependency>
+        <groupId>org.flywaydb</groupId>
+        <artifactId>flyway-database-postgresql</artifactId>
+        <version>${revision}</version>
       </dependency>
       <dependency>
         <groupId>org.flywaydb</groupId>
@@ -89,6 +98,10 @@
           <artifactId>jackson-dataformat-toml</artifactId>
         </exclusion>
         <exclusion>
+          <groupId>com.fasterxml.jackson.datatype</groupId>
+          <artifactId>jackson-datatype-jsr310</artifactId>
+        </exclusion>
+        <exclusion>
           <groupId>com.google.code.gson</groupId>
           <artifactId>gson</artifactId>
         </exclusion>
@@ -96,11 +109,20 @@
     </dependency>
     <dependency>
       <groupId>org.flywaydb</groupId>
+      <artifactId>flyway-database-postgresql</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.flywaydb</groupId>
       <artifactId>flyway-mysql</artifactId>
     </dependency>
     <dependency>
       <groupId>org.flywaydb</groupId>
       <artifactId>flyway-sqlserver</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.jenkins-ci.plugins</groupId>
+      <artifactId>jackson2-api</artifactId>
     </dependency>
 
     <!-- Test dependencies -->
@@ -226,11 +248,22 @@
   </pluginRepositories>
 
   <build>
+
     <resources>
       <resource>
         <filtering>true</filtering>
         <directory>src/main/resources</directory>
       </resource>
     </resources>
+
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.jenkins-ci.tools</groupId>
+          <artifactId>maven-hpi-plugin</artifactId>
+          <version>3.58-rc1620.2a_1eceb_329f5</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
   </build>
 </project>
