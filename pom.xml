@@ -261,7 +261,7 @@
         <plugin>
           <groupId>org.jenkins-ci.tools</groupId>
           <artifactId>maven-hpi-plugin</artifactId>
-          <version>3.58-rc1620.2a_1eceb_329f5</version>
+          <version>3.58-rc1621.0cb_cd49b_b_c68</version>
         </plugin>
       </plugins>
     </pluginManagement>
