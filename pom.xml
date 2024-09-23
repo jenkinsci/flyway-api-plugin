@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.jenkins-ci.plugins</groupId>
     <artifactId>plugin</artifactId>
-    <version>4.87</version>
+    <version>4.88</version>
     <relativePath />
   </parent>
   <groupId>io.jenkins.plugins</groupId>
@@ -46,9 +46,34 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
+        <groupId>io.jenkins.plugins</groupId>
+        <artifactId>gson-api</artifactId>
+        <version>2.11.0-41.v019fcf6125dc</version>
+      </dependency>
+      <dependency>
+        <groupId>io.jenkins.plugins</groupId>
+        <artifactId>mariadb-api</artifactId>
+        <version>3.4.1-77.v2dd016a_b_3dcf</version>
+      </dependency>
+      <dependency>
+        <groupId>io.jenkins.plugins</groupId>
+        <artifactId>mysql-api</artifactId>
+        <version>9.0.0-41.vb_fb_62f443490</version>
+      </dependency>
+      <dependency>
+        <groupId>io.jenkins.plugins</groupId>
+        <artifactId>postgresql-api</artifactId>
+        <version>42.7.2-40.v76d376d65c77</version>
+      </dependency>
+      <dependency>
+        <groupId>io.jenkins.plugins</groupId>
+        <artifactId>sqlserver-api</artifactId>
+        <version>12.8.1.jre11-63.v522a_b_7b_6ea_d7</version>
+      </dependency>
+      <dependency>
         <groupId>io.jenkins.tools.bom</groupId>
         <artifactId>bom-${jenkins.baseline}.x</artifactId>
-        <version>3358.vea_fa_1f41504d</version>
+        <version>3387.v0f2773fa_3200</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -78,6 +103,11 @@
         <groupId>org.flywaydb</groupId>
         <artifactId>flyway-sqlserver</artifactId>
         <version>${revision}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jenkins-ci.plugins</groupId>
+        <artifactId>jackson2-api</artifactId>
+        <version>2.17.0-379.v02de8ec9f64c</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
