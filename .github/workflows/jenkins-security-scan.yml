@@ -15,8 +15,72 @@ permissions:
   actions: read
 
 jobs:
-  security-scan:
-    uses: jenkins-infra/jenkins-security-scan/.github/workflows/jenkins-security-scan.yaml@v2
-    with:
-      java-cache: 'maven' # Optionally enable use of a build dependency cache. Specify 'maven' or 'gradle' as appropriate.
-      # java-version: 21 # Optionally specify what version of Java to set up for the build, or remove to use a recent default.
+  scan:
+    runs-on: ubuntu-latest # Provides `jq`
+    steps:
+      - name: Check out plugin
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: ${{ inputs.java-version || '17' }}
+          cache: ${{ inputs.java-cache }}
+
+      # https://github.com/jenkins-infra/github-reusable-workflows/issues/36
+      - name: Set up Maven
+        run: |
+          wget --no-verbose https://downloads.apache.org/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz
+          echo $CHECKSUM apache-maven-$MAVEN_VERSION-bin.tar.gz | sha512sum --check
+          tar xzf apache-maven-$MAVEN_VERSION-bin.tar.gz
+          rm apache-maven-$MAVEN_VERSION-bin.tar.gz
+          sudo mv apache-maven-$MAVEN_VERSION /opt/maven
+          sudo rm -f /usr/bin/mvn
+          sudo ln -s /opt/maven/bin/mvn /usr/bin/mvn
+          mvn --version
+        env:
+          MAVEN_VERSION: 3.9.9
+          # https://downloads.apache.org/maven/maven-3/3.9.9/binaries/apache-maven-3.9.9-bin.tar.gz.sha512
+          CHECKSUM: a555254d6b53d267965a3404ecb14e53c3827c09c3b94b5678835887ab404556bfaf78dcfe03ba76fa2508649dca8531c74bca4d5846513522404d48e8c4ac8b
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: java
+          config: |
+            disable-default-queries: true
+            packs:
+            - jenkins-infra/jenkins-codeql@0.0.2
+            - codeql/java-queries:AlertSuppression.ql
+            - codeql/java-queries:AlertSuppressionAnnotations.ql
+
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v3
+
+      - name: Run CodeQL
+        id: generate-sarif
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: Jenkins Security Scan
+          upload: failure-only
+
+      - name: Process SARIF
+        # Process the generated SARIF file:
+        # 1. Prevent conflicts with otherwise set up CodeQL scan by renaming the tool driver
+        # 2. Remove suppressed warnings because GitHub Code Scanning does not support inline suppressions
+        run: |
+          jq 'setpath(path(.runs[].tool.driver.name); "Jenkins Security Scan") | setpath(path(.runs[].tool.driver.organization); "Jenkins Project") | del(.runs[].results[] | select( .suppressions | length != 0 ))' ../results/java.sarif > jenkins-security-scan.sarif
+          mv -v ../results/java.sarif .
+
+      - name: Archive SARIF
+        uses: actions/upload-artifact@v4
+        with:
+          path: '*.sarif'
+          name: Jenkins Security Scan SARIF
+
+      - name: Upload Scan Result
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: jenkins-security-scan.sarif
+          category: Jenkins Security Scan
