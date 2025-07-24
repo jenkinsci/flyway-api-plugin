@@ -15,7 +15,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @Testcontainers(disabledWithoutDocker = true)
 public class MariaDbSmokeTest {
 
-    public static final String TEST_IMAGE = "mariadb:11.4.3";
+    public static final String TEST_IMAGE = "mariadb:11.8.2";
 
     @Test
     public void smokeTest(JenkinsRule j) throws Exception {
