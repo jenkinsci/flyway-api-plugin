@@ -15,7 +15,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @Testcontainers(disabledWithoutDocker = true)
 public class MySqlDbSmokeTest {
 
-    public static final String TEST_IMAGE = "mysql:9.0.1";
+    public static final String TEST_IMAGE = "mysql:9.4.0";
 
     @Test
     public void smokeTest(JenkinsRule j) throws Exception {
