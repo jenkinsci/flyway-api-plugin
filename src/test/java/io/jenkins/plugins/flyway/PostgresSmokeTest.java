@@ -15,11 +15,11 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @Testcontainers(disabledWithoutDocker = true)
 public class PostgresSmokeTest {
 
-    public static final String TEST_IMAGE = "postgres:17.5";
+    public static final String TEST_IMAGE = "postgres:18.0";
 
     @Test
     public void smokeTest(JenkinsRule j) throws Exception {
-        try (PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>(TEST_IMAGE)) {
+        try (PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>(TEST_IMAGE).withStartupAttempts(3)) {
             postgres.start();
             postgres.waitingFor(Wait.forListeningPort());
             validateFlywayMigrations(postgres);

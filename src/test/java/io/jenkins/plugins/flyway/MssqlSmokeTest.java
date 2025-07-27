@@ -22,7 +22,7 @@ public class MssqlSmokeTest {
     @Test
     @EnabledOnOs(OS.LINUX) // No ARM64 images on CI
     public void smokeTest(JenkinsRule j) throws Exception {
-        try (MSSQLServerContainer<?> mssql = new MSSQLServerContainer<>(TEST_IMAGE)) {
+        try (MSSQLServerContainer<?> mssql = new MSSQLServerContainer<>(TEST_IMAGE).withStartupAttempts(3)) {
             mssql.acceptLicense();
             mssql.start();
             mssql.waitingFor(Wait.forListeningPort());

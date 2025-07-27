@@ -15,11 +15,11 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @Testcontainers(disabledWithoutDocker = true)
 public class MariaDbSmokeTest {
 
-    public static final String TEST_IMAGE = "mariadb:11.8.2";
+    public static final String TEST_IMAGE = "mariadb:12.0.2";
 
     @Test
     public void smokeTest(JenkinsRule j) throws Exception {
-        try (MariaDBContainer<?> mysql = new MariaDBContainer<>(TEST_IMAGE)) {
+        try (MariaDBContainer<?> mysql = new MariaDBContainer<>(TEST_IMAGE).withStartupAttempts(3)) {
             mysql.start();
             mysql.waitingFor(Wait.forListeningPort());
             validateFlywayMigrations(mysql);
