@@ -15,7 +15,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @Testcontainers(disabledWithoutDocker = true)
 public class PostgresSmokeTest {
 
-    public static final String TEST_IMAGE = "postgres:16.4";
+    public static final String TEST_IMAGE = "postgres:17.5";
 
     @Test
     public void smokeTest(JenkinsRule j) throws Exception {
