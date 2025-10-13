@@ -15,11 +15,11 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @Testcontainers(disabledWithoutDocker = true)
 public class MySqlDbSmokeTest {
 
-    public static final String TEST_IMAGE = "mysql:9.0.1";
+    public static final String TEST_IMAGE = "mysql:8.4.6";
 
     @Test
     public void smokeTest(JenkinsRule j) throws Exception {
-        try (MySQLContainer<?> mysql = new MySQLContainer<>(TEST_IMAGE)) {
+        try (MySQLContainer<?> mysql = new MySQLContainer<>(TEST_IMAGE).withStartupAttempts(3)) {
             mysql.start();
             mysql.waitingFor(Wait.forListeningPort());
             validateFlywayMigrations(mysql);
