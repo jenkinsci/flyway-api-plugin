@@ -38,7 +38,7 @@
     <hpi.strictBundledArtifacts>true</hpi.strictBundledArtifacts>
 
     <!-- Test dependencies version -->
-    <testcontainer.version>1.21.3</testcontainer.version>
+    <testcontainer.version>1.21.4</testcontainer.version>
 
   </properties>
 
