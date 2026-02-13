@@ -12,7 +12,7 @@ import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 @WithJenkins
-@Testcontainers(disabledWithoutDocker = true)
+@Testcontainers(disabledWithoutDocker = false)
 public class MariaDbSmokeTest {
 
     public static final String TEST_IMAGE = "mariadb:12.0.2";
