@@ -40,6 +40,7 @@
 
     <!-- Test dependencies version -->
     <testcontainer.version>2.0.5</testcontainer.version>
+    <banObsoleteDependencyOverrides.skip>false</banObsoleteDependencyOverrides.skip>
 
   </properties>
 
