@@ -26,7 +26,7 @@
     <url>https://github.com/${gitHubRepo}</url>
   </scm>
   <properties>
-    <revision>13.1.0</revision>
+    <revision>13.2.0</revision>
     <changelist>999999-SNAPSHOT</changelist>
     <!-- https://www.jenkins.io/doc/developer/plugin-development/choosing-jenkins-baseline/ -->
     <jenkins.baseline>2.555</jenkins.baseline>
@@ -35,7 +35,7 @@
     <spotless.check.skip>false</spotless.check.skip>
     <ban-junit4-imports.skip>false</ban-junit4-imports.skip>
     <ban-commons-lang-2.skip>false</ban-commons-lang-2.skip>
-    <hpi.bundledArtifacts>flyway-core,flyway-database-postgresql,flyway-mysql,flyway-sqlserver</hpi.bundledArtifacts>
+    <hpi.bundledArtifacts>flyway-core,flyway-database-cockroachdb,flyway-database-postgresql,flyway-mysql,flyway-sqlserver</hpi.bundledArtifacts>
     <hpi.strictBundledArtifacts>true</hpi.strictBundledArtifacts>
 
     <!-- Test dependencies version -->
@@ -52,6 +52,11 @@
         <version>6607.v3ed3d8ddfed8</version>
         <type>pom</type>
         <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.flywaydb</groupId>
+        <artifactId>flyway-database-cockroachdb</artifactId>
+        <version>${revision}</version>
       </dependency>
       <dependency>
         <groupId>org.flywaydb</groupId>
@@ -143,6 +148,12 @@
     <dependency>
       <groupId>io.jenkins.plugins</groupId>
       <artifactId>sqlserver-api</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>testcontainers-cockroachdb</artifactId>
+      <version>${testcontainer.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
